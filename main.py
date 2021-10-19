@@ -2,7 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 from sklearn import svm
-from sklearn import svr
+#from sklearn import svr
 from sklearn.metrics import accuracy_score
 from sklearn.neighbors import KNeighborsClassifier
 
@@ -30,7 +30,7 @@ SVC_model = svm.SVC()
 # Это число точек, на которое будет смотреть
 # классификатор, чтобы определить, к какому классу принадлежит новая точка
 KNN_model = KNeighborsClassifier(n_neighbors=6)
-SVR_model = svr.SVR()
+#SVR_model = svr.SVR()
 
 SVC_model.fit(train_X, train_Y)
 KNN_model.fit(train_X, train_Y)
