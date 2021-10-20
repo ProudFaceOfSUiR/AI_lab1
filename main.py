@@ -2,9 +2,13 @@ import os
 import numpy as np
 import pandas as pd
 from sklearn import svm
-#from sklearn import svr
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
 from sklearn.metrics import accuracy_score
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.decomposition import LatentDirichletAllocation
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.linear_model import LogisticRegression
 
 
 def read_data(filename): #C:\Users\Anatoly\PycharmProjects\AI_lab1
@@ -30,22 +34,25 @@ SVC_model = svm.SVC()
 # Это число точек, на которое будет смотреть
 # классификатор, чтобы определить, к какому классу принадлежит новая точка
 KNN_model = KNeighborsClassifier(n_neighbors=6)
-#SVR_model = svr.SVR()
+lda_model = LatentDirichletAllocation(
+   max_iter=10, learning_method='online')
 
 SVC_model.fit(train_X, train_Y)
 KNN_model.fit(train_X, train_Y)
 
+pipe = make_pipeline(StandardScaler(),LogisticRegression())
+pipe.fit(train_X, train_Y)
 SVC_prediction = SVC_model.predict(test_X)
 KNN_prediction = KNN_model.predict(test_X)
-
-SVC_yhat = SVC_model.predict(test_X)
-KNN_yhat = KNN_model.predict(test_X)
+pipe_prediction = pipe.predict(test_X)
 
 print("SVC model accuracy = " + str(accuracy_score(SVC_prediction, test_Y)))
 print("KNN model accuracy = " + str(accuracy_score(KNN_prediction, test_Y)))
+print("pipe model accuracy = " + str(accuracy_score(pipe_prediction, test_Y)))
 
 from sklearn.metrics import classification_report
 target_names = ['Walking', 'Walking Upstairs', 'Walking Downstairs', 'Sitting', 'Standing', 'Laying']
 
 print(classification_report(test_Y, SVC_prediction, target_names=target_names))
 print(classification_report(test_Y, KNN_prediction, target_names=target_names))
+print(classification_report(test_Y, pipe_prediction, target_names=target_names))
