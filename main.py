@@ -20,7 +20,7 @@ def read_data(filename):
 
 def load_dataset(label_dict):
     '''
-    creatind label dict from files
+    creating label dict from files
     :param label_dict:
     :return: ladel dictionary
     '''
@@ -35,15 +35,21 @@ def load_dataset(label_dict):
 
 label_dict = {'WALKING':0, 'WALKING_UPSTAIRS':1, 'WALKING_DOWNSTAIRS':2, 'SITTING':3, 'STANDING':4, 'LAYING':5}
 train_X, train_Y, test_X, test_Y = load_dataset(label_dict)
-
+'''
+creating different models, pipe is the best
+'''
 SVC_model = svm.SVC()
 KNN_model = KNeighborsClassifier(n_neighbors=6)
 pipe_model = make_pipeline(StandardScaler(), LogisticRegression())
-
+'''
+training models
+'''
 SVC_model.fit(train_X, train_Y)
 KNN_model.fit(train_X, train_Y)
 pipe_model.fit(train_X, train_Y)
-
+'''
+checking prediction score
+'''
 SVC_prediction = SVC_model.predict(test_X)
 KNN_prediction = KNN_model.predict(test_X)
 pipe_prediction = pipe_model.predict(test_X)
@@ -51,7 +57,9 @@ pipe_prediction = pipe_model.predict(test_X)
 print("SVC model accuracy = " + str(accuracy_score(SVC_prediction, test_Y)))
 print("KNN model accuracy = " + str(accuracy_score(KNN_prediction, test_Y)))
 print("pipe model accuracy = " + str(accuracy_score(pipe_prediction, test_Y)))
-
+'''
+creating classification reports
+'''
 target_names = ['Walking', 'Walking Upstairs', 'Walking Downstairs', 'Sitting', 'Standing', 'Laying']
 
 print(classification_report(test_Y, SVC_prediction, target_names=target_names))
